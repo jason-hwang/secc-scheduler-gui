@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>secc-scheduler</title>
+  </head>
+  <style>
+    * {
+      margin:0px;
+      padding:0px;
+      box-sizing: border-box;
+      font-family:calibri, arial, helvetica;
+    }
+    html, body {
+      height:100%;
+    }
+    .main-container {
+      margin:20px;
+      height:85%;
+    }
+    .functions {
+      padding:20px;
+    }
+    #scheduler-view {
+      height:80%;
+    }
+    button {
+      height:30px;
+      width:120px;
+    }
+
+  </style>
+  <body>
+    <div class="functions">
+      Listen port : <input type="text" id="scheduler-port" value="10509">
+      <button id="scheduler-start">Start</button>
+      <button id="scheduler-stop">Stop</button><br/>
+      <span id="scheduler-status">Server is stopping :(</span>
+    </div>
+    <div class="main-container">
+      <webview id="scheduler-view" src="about:blank;"/>
+    </div>
+    <script>
+      /* 
+        https://github.com/electron/electron/blob/master/docs-translations/ko-KR/api/ipc-renderer.md 
+        http://electron.atom.io/docs/v0.33.0/api/web-contents/
+       */
+      var ipcRenderer = require('electron').ipcRenderer;
+
+      var webview = document.querySelector("#scheduler-view");
+      var start = document.querySelector('#scheduler-start');
+      var stop = document.querySelector('#scheduler-stop');
+      var serverPort = document.querySelector('#scheduler-port').value;
+
+      var emptyPageAddress = "about:blank;"
+      var schedulerAddress = "http://localhost"
+      
+      var startMeesage = "Server is running :)";
+      var stopMessage = "Server is stopping :(";
+
+      start.onclick = function(){
+        ipcRenderer.send('start-scheduler', serverPort);
+      }
+
+      stop.onclick = function(){
+        ipcRenderer.send('stop-scheduler');
+      }
+
+      function changeWebViewURL(address) {
+        webview.setAttribute('src', address);
+        console.log("Change Address : " + address);
+      }
+
+      // This function called by menubar start event on Main Process
+      ipcRenderer.on('call-start-scheduler', function(arg) {
+        ipcRenderer.send('start-scheduler', serverPort);
+      });
+
+      // This function called by menubar stop event on Main Process
+      ipcRenderer.on('call-stop-scheduler', function(arg) {
+        ipcRenderer.send('stop-scheduler');
+      });
+
+      // This function called by 'start-scheduler' ipc event on Main Process
+      ipcRenderer.on('start-scheduler-callback', function(arg) {
+        console.log('start-scheduler-callback');
+        changeWebViewURL(schedulerAddress+":"+serverPort);
+
+        document.querySelector("#scheduler-status").innerHTML = startMeesage;
+      });
+
+      // This function called by 'stop-scheduler' ipc event on Main Process
+      ipcRenderer.on('stop-scheduler-callback', function(arg) {
+        console.log('stop-scheduler-callback');
+        changeWebViewURL(emptyPageAddress);
+
+        document.querySelector("#scheduler-status").innerHTML = stopMessage;
+      });
+
+
+
+    </script>
+  </body>
+</html>
