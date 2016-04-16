@@ -17,7 +17,7 @@ var sockets = {};
 var path = require('path');
 var Tray = require('tray');
 var Menu = require('menu');
-var iconPath = path.join(__dirname, 'icons', 'icon.png');
+var iconPath = path.join(__dirname, 'icons', 'Icon.png');
 var appIcon = null;
 var contextMenu = null;
 
