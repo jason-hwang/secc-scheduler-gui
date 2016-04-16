@@ -23,6 +23,6 @@
   "homepage": "https://github.com/jason-hwang/secc-scheduler-gui",
   "devDependencies": {
     "electron-prebuilt": "^0.36.0",
-    "secc": "0.2.35"
+    "secc": "0.2.36"
   }
 }
