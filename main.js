@@ -8,13 +8,15 @@ const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
+var path = require('path');
+
 // Server information
-var server = require('./node_modules/secc/lib/scheduler.js');
-var serverPort = 10509;
+var SECC = require(path.join(__dirname, 'node_modules', 'secc', 'settings.json'));
+var server = require(path.join(__dirname, 'node_modules', 'secc', 'lib', 'scheduler'))(SECC);
+var serverPort = SECC.scheduler.port;
 var sockets = {};
 
 // for menus
-var path = require('path');
 var Tray = require('tray');
 var Menu = require('menu');
 var iconPath = path.join(__dirname, 'icons', 'Icon.png');
