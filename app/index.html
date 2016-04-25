@@ -50,7 +50,7 @@
       var webview = document.querySelector("#scheduler-view");
       var start = document.querySelector('#scheduler-start');
       var stop = document.querySelector('#scheduler-stop');
-      var serverPort = document.querySelector('#scheduler-port').value;
+      var serverPort = document.querySelector('#scheduler-port');
 
       var emptyPageAddress = "about:blank;"
       var schedulerAddress = "http://localhost"
@@ -59,7 +59,7 @@
       var stopMessage = "Server is stopping :(";
 
       start.onclick = function(){
-        ipcRenderer.send('start-scheduler', serverPort);
+        ipcRenderer.send('start-scheduler', serverPort.value);
       }
 
       stop.onclick = function(){
@@ -73,7 +73,7 @@
 
       // This function called by menubar start event on Main Process
       ipcRenderer.on('call-start-scheduler', function(arg) {
-        ipcRenderer.send('start-scheduler', serverPort);
+        ipcRenderer.send('start-scheduler', serverPort.value);
       });
 
       // This function called by menubar stop event on Main Process
@@ -84,7 +84,7 @@
       // This function called by 'start-scheduler' ipc event on Main Process
       ipcRenderer.on('start-scheduler-callback', function(arg) {
         console.log('start-scheduler-callback');
-        changeWebViewURL(schedulerAddress+":"+serverPort);
+        changeWebViewURL(schedulerAddress+":"+serverPort.value);
 
         document.querySelector("#scheduler-status").innerHTML = startMeesage;
       });

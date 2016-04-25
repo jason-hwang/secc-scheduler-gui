@@ -11,10 +11,9 @@ const BrowserWindow = electron.BrowserWindow;
 var path = require('path');
 
 // Server information
-var SECC = require(path.join(__dirname, 'node_modules', 'secc', 'settings.json'));
-var server = require(path.join(__dirname, 'node_modules', 'secc', 'lib', 'scheduler'))(SECC);
+var SECC = require('./node_modules/secc/settings.json');
+var scheduler = require('./node_modules/secc/lib/scheduler')(SECC);
 var serverPort = SECC.scheduler.port;
-var sockets = {};
 
 // for menus
 var Tray = require('tray');
@@ -76,70 +75,52 @@ function createMenuBar() {
   appIcon.setContextMenu(contextMenu);
 }
 
-function destroyAllSockes() {
-  for (var socketId in sockets) {
-    console.log('socket', socketId, 'destroyed');
-    sockets[socketId].destroy();
-  }
-}
 
-function startSheduler(port) {
-  if (!server.listening) {
-    server.listen(port, function () {
-      var host = server.address().address;
-      var port = server.address().port;
+function startSheduler(port, successCallback) {
+  //set custom port
+  setSchedulerPort(port);
+  
 
-      console.log('secc-scheduler listening at http://%s:%s', host, port);
+  scheduler.startServer(function(msg) {
+    console.log(msg);
+    
+    // Change tray server state
+    contextMenu.items[0].checked = true;
+    successCallback();
 
-      contextMenu.items[0].checked = true;
-    });
-
-    var nextSocketId = 0, sockets = {};
-
-    server.on('connection', function (socket) {
-      // Add a newly connected socket
-      var socketId = nextSocketId++;
-      sockets[socketId] = socket;
-      console.log('socket', socketId, 'opened');
-
-      // Remove the socket when it closes
-      socket.on('close', function () {
-        console.log('socket', socketId, 'closed');
-        delete sockets[socketId];
-      });
-
-    });
-  }
-}
-
-function stopSheduler() {
-  contextMenu.items[1].checked = true;
-
-  // Before close is called, it check handle===0 && connections===0.
-  // If connections exist, do not working close event.
-  server.getConnections(function(err, count) {
-    console.log("connections:"+count);
-
-    if (count) {
-      destroyAllSockes();
-
-      server.close(function(){
-        console.log("Closed Server");
-      });
-    }
+  }, function(msg) {
+    console.log(msg);
   });
+}
 
+function stopSheduler(successCallback) {
+    scheduler.stopServer(function(msg) {
+      console.log(msg);
+
+      // Change tray server state
+      contextMenu.items[1].checked = true;  
+      successCallback();
+
+    }, function(msg) {
+      console.log(msg);
+    });
+}
+
+function setSchedulerPort(port) {
+  SECC.scheduler.port = port;
 }
 
 
 ipcMain.on('start-scheduler', function(event, port) {
-  startSheduler(port);
-  event.sender.send('start-scheduler-callback');
+  startSheduler(port, function() {
+    event.sender.send('start-scheduler-callback');
+  });
 });
 
 ipcMain.on('stop-scheduler', function(event, arg) {
-  stopSheduler();
-  event.sender.send('stop-scheduler-callback');
+  stopSheduler(function() {
+    event.sender.send('stop-scheduler-callback');  
+  });
 });
 
 
