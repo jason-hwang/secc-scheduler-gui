@@ -18,9 +18,13 @@ var serverPort = SECC.scheduler.port;
 // for menus
 var Tray = require('tray');
 var Menu = require('menu');
-var iconPath = path.join(__dirname, 'icons', 'Icon.png');
+var iconOnPath = path.join(__dirname, 'icons', 'icon_on.png');
+var iconOffPath = path.join(__dirname, 'icons', 'icon_off.png');
 var appIcon = null;
 var contextMenu = null;
+
+const _START = 0;
+const _STOP = 1;
 
 // for ipc
 var ipcMain = electron.ipcMain;
@@ -46,7 +50,7 @@ function createWindow () {
 }
 
 function createMenuBar() {
-  appIcon = new Tray(iconPath);
+  appIcon = new Tray(iconOffPath);
   contextMenu = Menu.buildFromTemplate([
     {
       label: 'Start',
@@ -75,6 +79,16 @@ function createMenuBar() {
   appIcon.setContextMenu(contextMenu);
 }
 
+function changeTrayIconStatus(status) {
+  if (status === 'start') {
+    appIcon.setImage(iconOnPath);
+    contextMenu.items[_START].checked = true;
+  } else {
+    appIcon.setImage(iconOffPath);
+    contextMenu.items[_STOP].checked = true;
+  }
+}
+
 
 function startSheduler(port, successCallback) {
   //set custom port
@@ -85,7 +99,7 @@ function startSheduler(port, successCallback) {
     console.log(msg);
     
     // Change tray server state
-    contextMenu.items[0].checked = true;
+    changeTrayIconStatus('start');
     successCallback();
 
   }, function(msg) {
@@ -98,7 +112,7 @@ function stopSheduler(successCallback) {
       console.log(msg);
 
       // Change tray server state
-      contextMenu.items[1].checked = true;  
+      changeTrayIconStatus('stop');
       successCallback();
 
     }, function(msg) {
