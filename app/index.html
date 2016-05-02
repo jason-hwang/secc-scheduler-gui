@@ -3,13 +3,15 @@
   <head>
     <meta charset="UTF-8">
     <title>secc-scheduler</title>
+    <link rel="stylesheet" href="css/material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="js/material.min.js"></script>
   </head>
   <style>
     * {
       margin:0px;
       padding:0px;
       box-sizing: border-box;
-      font-family:calibri, arial, helvetica;
     }
     html, body {
       height:100%;
@@ -29,17 +31,76 @@
       width:120px;
     }
 
+    .demo-layout-transparent .mdl-layout__header,
+    .demo-layout-transparent .mdl-layout__drawer-button {
+      /* This background is dark, so we set text to white. Use 87% black instead if
+         your background is light. */
+      color: white;
+    }
+
+    .mdl-button-full-width {
+      width:100%;
+    }
+
+    .mdl-navigation__bottom_link img{
+      width:42px;
+      padding-right:5px;
+    }
+
   </style>
   <body>
-    <div class="functions">
-      Listen port : <input type="text" id="scheduler-port" value="10509">
-      <button id="scheduler-start">Start</button>
-      <button id="scheduler-stop">Stop</button><br/>
-      <span id="scheduler-status">Server is stopping :(</span>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <div class="mdl-layout-title">
+            Scheduler
+          </div>
+          <div class="mdl-layout-spacer"></div>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">secc-scheduler-gui</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="javascript:;">
+            <span style="font-weight:bold;color:#333;">LISTENING PORT</span>
+            <div class="mdl-textfield mdl-js-textfield">
+              <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="scheduler-port" value="10509">
+              <label class="mdl-textfield__label" for="sample2">Number...</label>
+              <span class="mdl-textfield__error">Input is not a number!</span>
+            </div>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button-full-width mdl-button--colored" id="scheduler-start">
+              Start
+            </button>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button-full-width mdl-button--accent" id="scheduler-stop" style="display:none;">
+              Stop
+            </button> 
+          </a>
+        </nav>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link mdl-navigation__bottom_link" href="https://github.com/jason-hwang/secc-scheduler-gui" target="_blank">
+            <img src="images/github-mark.svg" alt="Github logo">&nbsp;&nbsp;View Source
+          </a>
+          <a class="mdl-navigation__link mdl-navigation__bottom_link" href="https://github.com/jason-hwang/secc-scheduler-gui/issues/new" target="_blank">
+            <img src="images/feedback.svg" alt="Github logo">&nbsp;&nbsp;Submit Feedback
+          </a>
+        </nav>
+      </div>
+      
+      <main class="mdl-layout__content">
+        <div class="page-content">
+          <div class="main-container">
+            <webview id="scheduler-view" src="about:blank;"/>
+          </div>
+        </div>
+      </main>
+    </div> <!-- end header -->
+
+    <div id="toast-msg" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button class="mdl-snackbar__action" type="button"></button>
     </div>
-    <div class="main-container">
-      <webview id="scheduler-view" src="about:blank;"/>
-    </div>
+    
     <script>
       /* 
         https://github.com/electron/electron/blob/master/docs-translations/ko-KR/api/ipc-renderer.md 
@@ -51,12 +112,13 @@
       var start = document.querySelector('#scheduler-start');
       var stop = document.querySelector('#scheduler-stop');
       var serverPort = document.querySelector('#scheduler-port');
+      var snackbarContainer = document.querySelector('#toast-msg');
 
       var emptyPageAddress = "about:blank;"
       var schedulerAddress = "http://localhost"
       
-      var startMeesage = "Server is running :)";
-      var stopMessage = "Server is stopping :(";
+      var startMessage = "Server is running : )";
+      var stopMessage = "Server is stopping : (";
 
       start.onclick = function(){
         ipcRenderer.send('start-scheduler', serverPort.value);
@@ -83,10 +145,14 @@
 
       // This function called by 'start-scheduler' ipc event on Main Process
       ipcRenderer.on('start-scheduler-callback', function(arg) {
+        // when successfully server start
         console.log('start-scheduler-callback');
         changeWebViewURL(schedulerAddress+":"+serverPort.value);
 
-        document.querySelector("#scheduler-status").innerHTML = startMeesage;
+        start.setAttribute('style', 'display:none;');
+        stop.setAttribute('style', 'display:block;');
+
+        snackbarContainer.MaterialSnackbar.showSnackbar({message:startMessage});
       });
 
       // This function called by 'stop-scheduler' ipc event on Main Process
@@ -94,10 +160,11 @@
         console.log('stop-scheduler-callback');
         changeWebViewURL(emptyPageAddress);
 
-        document.querySelector("#scheduler-status").innerHTML = stopMessage;
+        start.setAttribute('style', 'display:block;');
+        stop.setAttribute('style', 'display:none;');
+
+        snackbarContainer.MaterialSnackbar.showSnackbar({message:stopMessage});
       });
-
-
 
     </script>
   </body>
