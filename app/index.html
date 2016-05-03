@@ -13,28 +13,13 @@
       padding:0px;
       box-sizing: border-box;
     }
-    html, body {
-      height:100%;
-    }
+    
     .main-container {
       margin:20px;
-      height:85%;
     }
-    .functions {
-      padding:20px;
-    }
-    #scheduler-view {
-      height:80%;
-    }
-    button {
-      height:30px;
-      width:120px;
-    }
-
+    
     .demo-layout-transparent .mdl-layout__header,
     .demo-layout-transparent .mdl-layout__drawer-button {
-      /* This background is dark, so we set text to white. Use 87% black instead if
-         your background is light. */
       color: white;
     }
 
@@ -42,9 +27,9 @@
       width:100%;
     }
 
-    .mdl-navigation__bottom_link img{
-      width:42px;
-      padding-right:5px;
+    .mdl-navigation__link img{
+      width:36px;
+      padding-right:10px;
     }
 
   </style>
@@ -59,7 +44,10 @@
         </div>
       </header>
       <div class="mdl-layout__drawer">
+        <!-- Title Area -->
         <span class="mdl-layout-title">secc-scheduler-gui</span>
+
+        <!-- Scheduler Info & function area -->
         <nav class="mdl-navigation">
           <a class="mdl-navigation__link" href="javascript:;">
             <span style="font-weight:bold;color:#333;">LISTENING PORT</span>
@@ -76,17 +64,32 @@
             </button> 
           </a>
         </nav>
+
+        <!-- Link area -->
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="#">
+            <img src="images/scheduler.svg" alt="Dashboard image">Scheduler
+          </a>
+          <a class="mdl-navigation__link" href="#">
+            <img src="images/dashboard.svg" alt="Dashboard image">Dashboard
+          </a>
+        </nav>
+
+        <!-- Divider -->
         <div class="mdl-layout-spacer"></div>
+
+        <!-- Bottom link -->
         <nav class="mdl-navigation">
           <a class="mdl-navigation__link mdl-navigation__bottom_link" href="https://github.com/jason-hwang/secc-scheduler-gui" target="_blank">
-            <img src="images/github-mark.svg" alt="Github logo">&nbsp;&nbsp;View Source
+            <img src="images/github-mark.svg" alt="Github logo">View Source
           </a>
           <a class="mdl-navigation__link mdl-navigation__bottom_link" href="https://github.com/jason-hwang/secc-scheduler-gui/issues/new" target="_blank">
-            <img src="images/feedback.svg" alt="Github logo">&nbsp;&nbsp;Submit Feedback
+            <img src="images/feedback.svg" alt="Feedback image">Submit Feedback
           </a>
         </nav>
       </div>
       
+      <!-- Main content area -->
       <main class="mdl-layout__content">
         <div class="page-content">
           <div class="main-container">
@@ -94,7 +97,7 @@
           </div>
         </div>
       </main>
-    </div> <!-- end header -->
+    </div> <!-- End of mdl-layout__drawer -->
 
     <div id="toast-msg" class="mdl-js-snackbar mdl-snackbar">
       <div class="mdl-snackbar__text"></div>
