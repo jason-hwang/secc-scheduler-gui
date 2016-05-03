@@ -37,7 +37,7 @@
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
-          <div class="mdl-layout-title">
+          <div class="mdl-layout-title" id="main-header-title">
             Scheduler
           </div>
           <div class="mdl-layout-spacer"></div>
@@ -56,10 +56,12 @@
               <label class="mdl-textfield__label" for="sample2">Number...</label>
               <span class="mdl-textfield__error">Input is not a number!</span>
             </div>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button-full-width mdl-button--colored" id="scheduler-start">
+            <button class="mdl-button mdl-js-button mdl-button--raised 
+            mdl-js-ripple-effect mdl-button-full-width mdl-button--colored" id="scheduler-start">
               Start
             </button>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button-full-width mdl-button--accent" id="scheduler-stop" style="display:none;">
+            <button class="mdl-button mdl-js-button mdl-button--raised 
+            mdl-js-ripple-effect mdl-button-full-width mdl-button--accent" id="scheduler-stop" style="display:none;">
               Stop
             </button> 
           </a>
@@ -67,10 +69,10 @@
 
         <!-- Link area -->
         <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="#">
-            <img src="images/scheduler.svg" alt="Dashboard image">Scheduler
+          <a class="mdl-navigation__link mdl-custom-tab" href="#tab-scheduler" title="Scheduler">
+            <img src="images/scheduler.svg" alt="Scheduler image">Scheduler
           </a>
-          <a class="mdl-navigation__link" href="#">
+          <a class="mdl-navigation__link mdl-custom-tab" href="#tab-dashboard" title="Dashboard">
             <img src="images/dashboard.svg" alt="Dashboard image">Dashboard
           </a>
         </nav>
@@ -80,10 +82,12 @@
 
         <!-- Bottom link -->
         <nav class="mdl-navigation">
-          <a class="mdl-navigation__link mdl-navigation__bottom_link" href="https://github.com/jason-hwang/secc-scheduler-gui" target="_blank">
+          <a class="mdl-navigation__link mdl-navigation__bottom_link" 
+          href="https://github.com/jason-hwang/secc-scheduler-gui" target="_blank">
             <img src="images/github-mark.svg" alt="Github logo">View Source
           </a>
-          <a class="mdl-navigation__link mdl-navigation__bottom_link" href="https://github.com/jason-hwang/secc-scheduler-gui/issues/new" target="_blank">
+          <a class="mdl-navigation__link mdl-navigation__bottom_link" 
+          href="https://github.com/jason-hwang/secc-scheduler-gui/issues/new" target="_blank">
             <img src="images/feedback.svg" alt="Feedback image">Submit Feedback
           </a>
         </nav>
@@ -91,11 +95,21 @@
       
       <!-- Main content area -->
       <main class="mdl-layout__content">
-        <div class="page-content">
-          <div class="main-container">
-            <webview id="scheduler-view" src="about:blank;"/>
+        <section class="mdl-layout__tab-panel is-active" id="tab-scheduler">
+          <div class="page-content">
+            <div class="main-container">
+              This is Scheduler
+              <webview id="scheduler-view" src="about:blank;"/>
+            </div>
           </div>
-        </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="tab-dashboard">
+          <div class="page-content">
+            <div class="main-container">
+              This is Dashboard
+            </div>
+          </div>
+        </section>
       </main>
     </div> <!-- End of mdl-layout__drawer -->
 
@@ -136,6 +150,13 @@
         console.log("Change Address : " + address);
       }
 
+      function closeDrawerMenu() {
+        var drawerMenu = document.querySelector(".mdl-layout__drawer");
+        var obfuscator = document.querySelector(".mdl-layout__obfuscator");
+        drawerMenu.classList.remove("is-visible");
+        obfuscator.classList.remove("is-visible");
+      }
+
       // This function called by menubar start event on Main Process
       ipcRenderer.on('call-start-scheduler', function(arg) {
         ipcRenderer.send('start-scheduler', serverPort.value);
@@ -156,6 +177,7 @@
         stop.setAttribute('style', 'display:block;');
 
         snackbarContainer.MaterialSnackbar.showSnackbar({message:startMessage});
+        closeDrawerMenu();
       });
 
       // This function called by 'stop-scheduler' ipc event on Main Process
@@ -167,7 +189,35 @@
         stop.setAttribute('style', 'display:none;');
 
         snackbarContainer.MaterialSnackbar.showSnackbar({message:stopMessage});
+        closeDrawerMenu();
       });
+
+      // for gui
+      function clearIsActive(customTabs) {
+        for (var i=0; i<customTabs.length; i++) {
+          customTabs[i].classList.remove("is-active");
+        }
+      }
+
+      function changeMainTitle(title) {
+        document.querySelector("#main-header-title").innerHTML = title;
+      }
+
+      var customTabs = document.querySelectorAll(".mdl-custom-tab");
+      var customTabPanels = document.querySelectorAll(".mdl-layout__tab-panel");
+
+      // register event
+      for(var i=0; i<customTabs.length; i++) {
+        (function(idx) {
+            customTabs[idx].onclick = function() {
+              clearIsActive(customTabPanels);
+              customTabPanels[idx].classList.add("is-active");
+              changeMainTitle(customTabs[idx].getAttribute("title"));
+              
+              closeDrawerMenu();
+            }
+        })(i);
+      }
 
     </script>
   </body>
