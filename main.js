@@ -144,6 +144,9 @@ ipcMain.on('stop-scheduler', function(event, arg) {
   });
 });
 
+ipcMain.on('check-scheduler-running', function(event, arg) {
+  event.sender.send('check-scheduler-running-callback', scheduler.server);
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

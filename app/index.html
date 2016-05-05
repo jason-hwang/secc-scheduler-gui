@@ -119,10 +119,6 @@
     </div>
     
     <script>
-      /* 
-        https://github.com/electron/electron/blob/master/docs-translations/ko-KR/api/ipc-renderer.md 
-        http://electron.atom.io/docs/v0.33.0/api/web-contents/
-       */
       var ipcRenderer = require('electron').ipcRenderer;
 
       var webview = document.querySelector("#scheduler-view");
@@ -157,39 +153,57 @@
         obfuscator.classList.remove("is-visible");
       }
 
+      function changeSchedulerStatus(flag) {
+        var changedURL = '';
+        var msg = null;
+        var startBtnVisible = '';
+        var stopBtnVisible = '';
+
+        if (flag === 'start') {
+          changedURL = schedulerAddress+":"+serverPort.value;
+          msg = { message:startMessage };
+          startBtnVisible = 'display:none;';
+          stopBtnVisible = 'display:block;';
+        } else {
+          changedURL = emptyPageAddress;
+          msg = { message:stopMessage };
+          startBtnVisible = 'display:block';
+          stopBtnVisible = 'display:none';
+        }
+
+        changeWebViewURL(changedURL);
+        start.setAttribute('style', startBtnVisible);
+        stop.setAttribute('style', stopBtnVisible);
+        snackbarContainer.MaterialSnackbar.showSnackbar(msg);
+      }
+
       // This function called by menubar start event on Main Process
-      ipcRenderer.on('call-start-scheduler', function(arg) {
+      ipcRenderer.on('call-start-scheduler', function(evnet, arg) {
         ipcRenderer.send('start-scheduler', serverPort.value);
       });
 
       // This function called by menubar stop event on Main Process
-      ipcRenderer.on('call-stop-scheduler', function(arg) {
+      ipcRenderer.on('call-stop-scheduler', function(event, arg) {
         ipcRenderer.send('stop-scheduler');
       });
 
       // This function called by 'start-scheduler' ipc event on Main Process
-      ipcRenderer.on('start-scheduler-callback', function(arg) {
-        // when successfully server start
-        console.log('start-scheduler-callback');
-        changeWebViewURL(schedulerAddress+":"+serverPort.value);
-
-        start.setAttribute('style', 'display:none;');
-        stop.setAttribute('style', 'display:block;');
-
-        snackbarContainer.MaterialSnackbar.showSnackbar({message:startMessage});
+      ipcRenderer.on('start-scheduler-callback', function(event, arg) {
+        changeSchedulerStatus('start');
         closeDrawerMenu();
       });
 
       // This function called by 'stop-scheduler' ipc event on Main Process
-      ipcRenderer.on('stop-scheduler-callback', function(arg) {
-        console.log('stop-scheduler-callback');
-        changeWebViewURL(emptyPageAddress);
-
-        start.setAttribute('style', 'display:block;');
-        stop.setAttribute('style', 'display:none;');
-
-        snackbarContainer.MaterialSnackbar.showSnackbar({message:stopMessage});
+      ipcRenderer.on('stop-scheduler-callback', function(event, arg) {
+        changeSchedulerStatus('stop');
         closeDrawerMenu();
+      });
+
+      // This function called by 'check-scheduler-running' ipc event on Main Process
+      ipcRenderer.on('check-scheduler-running-callback', function(event, server) {
+        if (server) {
+          changeSchedulerStatus('start');
+        }
       });
 
       // for gui
@@ -213,11 +227,14 @@
               clearIsActive(customTabPanels);
               customTabPanels[idx].classList.add("is-active");
               changeMainTitle(customTabs[idx].getAttribute("title"));
-              
               closeDrawerMenu();
             }
         })(i);
       }
+
+      (function(){
+        ipcRenderer.send('check-scheduler-running');
+      })();
 
     </script>
   </body>
