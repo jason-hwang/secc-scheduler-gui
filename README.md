@@ -13,8 +13,8 @@ npm install && npm start
 ```
 
 make sure you've already installed node.js, npm and (optionally) redis
-* Ubuntu $ sudo apt-get install nodejs npm nodejs-legacy redis-server
-* Mac $ brew install nodejs redis
+* Ubuntu $ sudo apt-get install nodejs npm nodejs-legacy
+* Mac $ brew install nodejs
 
 # License
 
