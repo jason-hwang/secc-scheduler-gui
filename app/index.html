@@ -5,7 +5,8 @@
     <title>secc-scheduler</title>
     <link rel="stylesheet" href="css/material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <script src="js/material.min.js"></script>
+    <script type="text/javascript" src="js/material.min.js"></script>
+    <script>window.$ = window.jQuery = require('./js/jquery-1.12.3.min');</script>
   </head>
   <style>
     * {
@@ -30,6 +31,18 @@
     .mdl-navigation__link img{
       width:36px;
       padding-right:10px;
+    }
+
+    .common-card-wide {
+      width:100%;
+    }
+
+    .common-textfield-wide {
+      width:70%;
+    }
+
+    .mdl-card__supporting-text {
+      width:100%;
     }
 
   </style>
@@ -98,8 +111,59 @@
         <section class="mdl-layout__tab-panel is-active" id="tab-scheduler">
           <div class="page-content">
             <div class="main-container">
-              This is Scheduler
-              <webview id="scheduler-view" src="about:blank;"/>
+
+              <!-- Environment Path -->
+              <div class="common-card-wide mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">Environment Path</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                  <div>
+                    Upload Path : 
+                    <div class="common-textfield-wide mdl-textfield mdl-js-textfield">
+                      <input class="mdl-textfield__input" type="text" id="upload-path-field">
+                      <label class="mdl-textfield__label" for="upload-path"></label>
+                    </div>
+                    <button class="mdl-button mdl-js-button mdl-button--raised 
+                    mdl-js-ripple-effect" id="upload-path-btn">
+                      ...
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised 
+                    mdl-js-ripple-effect" id="open-upload-path">
+                      Open
+                    </button>
+                    <input type="file" id="hidden-upload-path" 
+                    webkitdirectory directory multiple hidden/>
+                  </div>
+                  <div>
+                    Archive Path : 
+                    <div class="common-textfield-wide mdl-textfield mdl-js-textfield">
+                      <input class="mdl-textfield__input" type="text" id="archive-path-field">
+                      <label class="mdl-textfield__label" for="archive-path"></label>
+                    </div>
+                    <button class="mdl-button mdl-js-button mdl-button--raised 
+                    mdl-js-ripple-effect" id="archive-path-btn">
+                      ...
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised 
+                    mdl-js-ripple-effect" id="open-archive-path">
+                      Open
+                    </button>
+                    <input type="file" id="hidden-archive-path" 
+                    webkitdirectory directory multiple hidden/>
+                  </div>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="env-path-save">
+                    SAVE
+                  </a>
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="env-path-reset">
+                    RESET
+                  </a>
+                </div>
+              </div>
+
+
             </div>
           </div>
         </section>
@@ -107,6 +171,7 @@
           <div class="page-content">
             <div class="main-container">
               This is Dashboard
+              <webview id="scheduler-view" src="about:blank;"/>
             </div>
           </div>
         </section>
@@ -133,12 +198,51 @@
       var startMessage = "Server is running : )";
       var stopMessage = "Server is stopping : (";
 
-      start.onclick = function(){
+      var uploadPathField = document.querySelector('#upload-path-field');
+      var uploadPathBtn = document.querySelector('#upload-path-btn');
+      var uploadPathOpen = document.querySelector('#open-upload-path');
+      var archivePathField = document.querySelector('#archive-path-field');
+      var archivePathBtn = document.querySelector('#archive-path-btn');
+      var archivePathOpen = document.querySelector('#open-archive-path');
+
+      var envPathSave = document.querySelector('#env-path-save');
+      var envPathReset = document.querySelector('#env-path-reset');
+
+      start.onclick = function() {
         ipcRenderer.send('start-scheduler', serverPort.value);
       }
 
-      stop.onclick = function(){
+      stop.onclick = function() {
         ipcRenderer.send('stop-scheduler');
+      }
+
+      uploadPathBtn.onclick = function() {
+        ipcRenderer.send('open-file-explorer', 'upload');
+      }
+
+      archivePathBtn.onclick = function() {
+        ipcRenderer.send('open-file-explorer', 'archive'); 
+      }
+
+      envPathSave.onclick = function() {
+        ipcRenderer.send('save-env-path', { 
+          uploadPath: uploadPathField.value,
+          archivePath: archivePathField.value
+        });
+        console.log("save env paths.");
+      }
+
+      envPathReset.onclick = function() {
+        ipcRenderer.send('reset-env-path');
+        console.log("reset env paths.");
+      }
+
+      uploadPathOpen.onclick = function() {
+        ipcRenderer.send('open-env-path', 'upload');
+      }
+
+      archivePathOpen.onclick = function() {
+        ipcRenderer.send('open-env-path', 'archive');
       }
 
       function changeWebViewURL(address) {
@@ -206,6 +310,29 @@
         }
       });
 
+      // This function called by 'check-scheduler-running' ipc event on Main Process
+      ipcRenderer.on('get-scheduler-settings-callback', function(event, settings) {
+        uploadPathField.value = settings.uploadPath;
+        archivePathField.value = settings.archivePath;
+
+        console.log('uploadPath:', settings.uploadPath);
+        console.log('archivePath:', settings.archivePath);
+      });
+
+      // This function called by 'check-scheduler-running' ipc event on Main Process
+      ipcRenderer.on('open-file-explorer-callback', function(event, obj) {
+        if (typeof obj.path === 'undefined') {
+          console.log("There is no path.");
+          return;
+        }
+
+        if (obj.type === 'upload') {
+          uploadPathField.value = obj.path;
+        } else if (obj.type === 'archive') {
+          archivePathField.value = obj.path;
+        }
+      });
+
       // for gui
       function clearIsActive(customTabs) {
         for (var i=0; i<customTabs.length; i++) {
@@ -234,6 +361,7 @@
 
       (function(){
         ipcRenderer.send('check-scheduler-running');
+        ipcRenderer.send('get-scheduler-settings');
       })();
 
     </script>

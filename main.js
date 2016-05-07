@@ -4,11 +4,15 @@ const electron = require('electron');
 
 // Module to control application life.
 const app = electron.app;
+const userDataPath = app.getPath('userData');
+
+const storage = require('electron-json-storage');
 
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
 var path = require('path');
+var debug = require('debug');
 
 // Server information
 var SECC = require('./node_modules/secc/settings.json');
@@ -131,6 +135,81 @@ function setSchedulerPort(port) {
   SECC.scheduler.port = port;
 }
 
+function initDefaultAppSettings(callback) {
+  var settings = new Object();
+
+  settings.appDataPath = path.join(userDataPath);
+  settings.uploadPath = path.join(userDataPath, 'uploads');
+  settings.archivePath = path.join(userDataPath, 'archive');
+
+  var fs = require('fs');
+
+  if (!fs.existsSync(settings.appDataPath)){
+    fs.mkdirSync(settings.appDataPath);
+  }
+
+  if (!fs.existsSync(settings.uploadPath)){
+    fs.mkdirSync(settings.uploadPath);
+  }
+
+  if (!fs.existsSync(settings.archivePath)){
+    fs.mkdirSync(settings.archivePath);
+  }
+
+  // Write
+  storage.set('settings', settings, function(err) {
+    if (err) throw error;
+    console.log("Set Default App Settings");
+    SECC.uploadPath = settings.uploadPath;
+    SECC.archivePath = settings.archivePath;
+    debug(SECC);
+
+    if (callback) {
+      callback();
+    }
+  });
+}
+
+function getAppSettings() {
+  console.log("Get App Settings");
+  storage.get('settings', function(err, settings) {
+    if (err) throw error;
+
+    if (!settings.hasOwnProperty('archivePath')) {
+      console.log("There is no app settings.");
+      initDefaultAppSettings();
+    } else {
+      SECC.uploadPath = settings.uploadPath;
+      SECC.archivePath = settings.archivePath;
+      debug(SECC);
+    }
+  });
+}
+
+
+function setAppSettings(uploadPath, archivePath) {
+  var settings = new Object();
+  settings.uploadPath = uploadPath;
+  settings.archivePath = archivePath;
+
+  // Write
+  storage.set('settings', settings, function() {
+    console.log("Set App Settings");
+    SECC.uploadPath = settings.uploadPath;
+    SECC.archivePath = settings.archivePath;
+  });
+}
+
+
+function removeAppSettings(callback) {
+  storage.remove('settings', function(error) {
+    if (error) throw error;
+    if (callback) {
+      callback();
+    }
+  });
+}
+
 
 ipcMain.on('start-scheduler', function(event, port) {
   startSheduler(port, function() {
@@ -140,7 +219,7 @@ ipcMain.on('start-scheduler', function(event, port) {
 
 ipcMain.on('stop-scheduler', function(event, arg) {
   stopSheduler(function() {
-    event.sender.send('stop-scheduler-callback');  
+    event.sender.send('stop-scheduler-callback');
   });
 });
 
@@ -148,9 +227,66 @@ ipcMain.on('check-scheduler-running', function(event, arg) {
   event.sender.send('check-scheduler-running-callback', scheduler.server);
 });
 
+ipcMain.on('get-scheduler-settings', function(event, arg) {
+  event.sender.send('get-scheduler-settings-callback', {
+      uploadPath: SECC.uploadPath,
+      archivePath: SECC.archivePath
+    });
+});
+
+ipcMain.on('open-file-explorer', function(event, type) {
+  const dialog = electron.dialog;
+  const directoryPath = dialog.showOpenDialog({ 
+    properties: [ 'openDirectory', 'multiSelections' ]
+  });
+
+  event.sender.send('open-file-explorer-callback', { 
+      type: type, 
+      path: directoryPath
+    });
+});
+
+ipcMain.on('save-env-path', function(event, paths) {
+  setAppSettings(paths.uploadPath, paths.archivePath);
+});
+
+ipcMain.on('reset-env-path', function(event, arg) {
+  removeAppSettings(function() {
+    initDefaultAppSettings(function() {
+      event.sender.send('get-scheduler-settings-callback', {
+        uploadPath: SECC.uploadPath,
+        archivePath: SECC.archivePath
+      });
+    });  
+  });
+});
+
+ipcMain.on('open-env-path', function(event, type) {
+  var openPath = '';
+
+  if (type === 'upload') {
+    openPath = SECC.uploadPath;
+  } else if (type === 'archive') {
+    openPath = SECC.archivePath;
+  } else {
+    debug("Unkown type.");
+    return;
+  }
+
+  electron.dialog.showOpenDialog({
+    defaultPath: openPath,
+    properties: [
+      'openDirectory',
+      'multiSelections'
+    ]
+  });
+});
+
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', function(){
+  getAppSettings();
   createWindow();
   createMenuBar();
 });
