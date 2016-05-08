@@ -1,6 +1,6 @@
 {
   "name": "secc-scheduler-gui",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "This is GUI scheduler for secc",
   "main": "main.js",
   "scripts": {
