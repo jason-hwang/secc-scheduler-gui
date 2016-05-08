@@ -229,7 +229,7 @@
           uploadPath: uploadPathField.value,
           archivePath: archivePathField.value
         });
-        console.log("save env paths.");
+        showMessage("save env paths.")
       }
 
       envPathReset.onclick = function() {
@@ -265,12 +265,12 @@
 
         if (flag === 'start') {
           changedURL = schedulerAddress+":"+serverPort.value;
-          msg = { message:startMessage };
+          msg = startMessage;
           startBtnVisible = 'display:none;';
           stopBtnVisible = 'display:block;';
         } else {
           changedURL = emptyPageAddress;
-          msg = { message:stopMessage };
+          msg = stopMessage;
           startBtnVisible = 'display:block';
           stopBtnVisible = 'display:none';
         }
@@ -278,7 +278,11 @@
         changeWebViewURL(changedURL);
         start.setAttribute('style', startBtnVisible);
         stop.setAttribute('style', stopBtnVisible);
-        snackbarContainer.MaterialSnackbar.showSnackbar(msg);
+        showMessage(msg);
+      }
+
+      function showMessage(msg) {
+        snackbarContainer.MaterialSnackbar.showSnackbar({message:msg});
       }
 
       // This function called by menubar start event on Main Process
@@ -322,7 +326,7 @@
       // This function called by 'check-scheduler-running' ipc event on Main Process
       ipcRenderer.on('open-file-explorer-callback', function(event, obj) {
         if (typeof obj.path === 'undefined') {
-          console.log("There is no path.");
+          console.log("Not selected..");
           return;
         }
 
