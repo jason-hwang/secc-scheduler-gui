@@ -22,7 +22,7 @@ Make sure you've already installed node.js, npm and (optionally) redis
 - Linux
 
 ## Download 
-You can get executable binary packages from [releases page](https://github.com/jason-hwang/secc-scheduler-gui/releases)
+You can get executable binary packages from the [releases page](https://github.com/jason-hwang/secc-scheduler-gui/releases)
 
 # License
 
