@@ -17,7 +17,7 @@ Make sure you've already installed node.js, npm and (optionally) redis
 * Mac $ brew install nodejs
 
 ## Support
-- MacOS
+- OS X
 - Windows
 - Linux
 
