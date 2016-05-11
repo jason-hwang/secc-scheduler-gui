@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <title>secc-scheduler</title>
-    <link rel="stylesheet" href="css/material.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="css/material.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="js/material.min.js"></script>
     <script>window.$ = window.jQuery = require('./js/jquery-1.12.3.min');</script>
   </head>
@@ -14,7 +16,6 @@
       padding:0px;
       box-sizing: border-box;
     }
-    
     .main-container {
       margin:20px;
     }
@@ -45,6 +46,9 @@
       width:100%;
     }
 
+    .mdl-layout-title, .mdl-navigation, .mdl-layout__content {
+      font-family: 'Source Sans Pro', sans-serif;
+    }
   </style>
   <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
@@ -63,7 +67,7 @@
         <!-- Scheduler Info & function area -->
         <nav class="mdl-navigation">
           <a class="mdl-navigation__link" href="javascript:;">
-            <span style="font-weight:bold;color:#333;">LISTENING PORT</span>
+            <span style="font-weight:bold;color:#333;"><i>LISTENING PORT</i></span>
             <div class="mdl-textfield mdl-js-textfield">
               <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="scheduler-port" value="10509">
               <label class="mdl-textfield__label" for="sample2">Number...</label>
