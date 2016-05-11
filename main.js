@@ -237,7 +237,7 @@ ipcMain.on('get-scheduler-settings', function(event, arg) {
 ipcMain.on('open-file-explorer', function(event, type) {
   const dialog = electron.dialog;
   const directoryPath = dialog.showOpenDialog({ 
-    properties: [ 'openDirectory', 'multiSelections' ]
+    properties: [ 'openDirectory']
   });
 
   event.sender.send('open-file-explorer-callback', { 
@@ -273,13 +273,8 @@ ipcMain.on('open-env-path', function(event, type) {
     return;
   }
 
-  electron.dialog.showOpenDialog({
-    defaultPath: openPath,
-    properties: [
-      'openDirectory',
-      'multiSelections'
-    ]
-  });
+  const shell = electron.shell;
+  shell.showItemInFolder(openPath);
 });
 
 
