@@ -42,13 +42,32 @@
       width:70%;
     }
 
+    .mdl-card {
+      margin-bottom:20px;
+    }
+
     .mdl-card__supporting-text {
       width:100%;
     }
 
     .mdl-layout-title, .mdl-navigation, .mdl-layout__content {
       font-family: 'Source Sans Pro', sans-serif;
+      font-weight: 800; 
     }
+
+    .mdl-card .mdl-data-table {
+      border:none;
+      border-top:1px solid rgba(0,0,0,.12);
+    }
+
+    .mdl-card .mdl-data-table td {
+      border-bottom:0px;
+    }
+
+    .mdl-layout__tab-panel {
+      display: none;
+    }
+
   </style>
   <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
@@ -120,6 +139,7 @@
             </div>
           </div>
         </section>
+
         <section class="mdl-layout__tab-panel" id="tab-scheduler">
           <div class="page-content">
             <div class="main-container">
@@ -139,6 +159,7 @@
                     mdl-js-ripple-effect" id="upload-path-btn">
                       ...
                     </button>
+                    &nbsp;
                     <button class="mdl-button mdl-js-button mdl-button--raised 
                     mdl-js-ripple-effect" id="open-upload-path">
                       Open
@@ -156,6 +177,7 @@
                     mdl-js-ripple-effect" id="archive-path-btn">
                       ...
                     </button>
+                    &nbsp;
                     <button class="mdl-button mdl-js-button mdl-button--raised 
                     mdl-js-ripple-effect" id="open-archive-path">
                       Open
@@ -173,6 +195,131 @@
                   </a>
                 </div>
               </div>
+              <!-- End of Enviorment Path -->
+
+              <!-- Archive Lists -->
+              <div class="common-card-wide mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">Archive Lists</h2>
+                </div>
+                <table class="common-card-wide mdl-data-table mdl-js-data-table mdl-data-table--selectable" id="archive-lists">
+                  <thead>
+                    <tr>
+                      <th class="mdl-data-table__cell--non-numeric">No.</th>
+                      <th class="mdl-data-table__cell--non-numeric">Archive ID</th>
+                      <th class="mdl-data-table__cell--non-numeric">platform</th>
+                      <th class="mdl-data-table__cell--non-numeric">Arch</th>
+                      <th class="mdl-data-table__cell--non-numeric">Compiler</th>
+                      <th class="mdl-data-table__cell--non-numeric">Version</th>
+                      <th class="mdl-data-table__cell--non-numeric">Archive File</th>
+                      <th class="mdl-data-table__cell--non-numeric">More</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mdl-data-table__cell--non-numeric">1</td>
+                      <td class="mdl-data-table__cell--non-numeric">a42d5412d7c69a37bfa58165f74c00952fbbe0c9</td>
+                      <td class="mdl-data-table__cell--non-numeric">darwin</td>
+                      <td class="mdl-data-table__cell--non-numeric">x64</td>
+                      <td class="mdl-data-table__cell--non-numeric">clang</td>
+                      <td class="mdl-data-table__cell--non-numeric">Apple LLVM version 7.3.0 </td>
+                      <td class="mdl-data-table__cell--non-numeric">Download</td>
+                      <td class="mdl-data-table__cell--non-numeric">More</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="mdl-card__actions mdl-card--border">
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="upload-archive-lists">
+                    UPLOAD
+                  </a>
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="delete-archive-lists">
+                    DELETE
+                  </a>
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="refresh-archive-lists">
+                    REFRESH
+                  </a>
+                </div>
+              </div>
+              <!-- End of Archive Lists -->
+
+              <!-- Daemon Lists -->
+              <div class="common-card-wide mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">Daemon Lists</h2>
+                </div>
+                <table class="common-card-wide mdl-data-table mdl-js-data-table mdl-data-table--selectable" id="daemon-lists">
+                  <thead>
+                    <tr>
+                      <th class="mdl-data-table__cell--non-numeric">No.</th>
+                      <th class="mdl-data-table__cell--non-numeric">Daemon ID</th>
+                      <th class="mdl-data-table__cell--non-numeric">Jobs</th>
+                      <th class="mdl-data-table__cell--non-numeric">Max Jobs</th>
+                      <th class="mdl-data-table__cell--non-numeric">Num CPUs</th>
+                      <th class="mdl-data-table__cell--non-numeric">Daemon Address</th>
+                      <th class="mdl-data-table__cell--non-numeric">Daemon Port</th>
+                      <th class="mdl-data-table__cell--non-numeric">Type</th>
+                      <th class="mdl-data-table__cell--non-numeric">Creation Datetime</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mdl-data-table__cell--non-numeric">1</td>
+                      <td class="mdl-data-table__cell--non-numeric">4qamwuejtdR0PG80AAAk</td>
+                      <td class="mdl-data-table__cell--non-numeric">0</td>
+                      <td class="mdl-data-table__cell--non-numeric">0</td>
+                      <td class="mdl-data-table__cell--non-numeric">0</td>
+                      <td class="mdl-data-table__cell--non-numeric">127.0.0.1</td>
+                      <td class="mdl-data-table__cell--non-numeric">8080</td>
+                      <td class="mdl-data-table__cell--non-numeric">guest</td>
+                      <td class="mdl-data-table__cell--non-numeric">2016-05-17T15:32:19.105Z</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="mdl-card__actions mdl-card--border">
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="refresh-deamon-lists">
+                    REFRESH
+                  </a>
+                </div>
+              </div>
+              <!-- End of Daemon Lists -->
+
+              <!-- Job Lists -->
+              <div class="common-card-wide mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">Job Lists</h2>
+                </div>
+                <table class="common-card-wide mdl-data-table mdl-js-data-table mdl-data-table--selectable" id="Job-lists">
+                  <thead>
+                    <tr>
+                      <th class="mdl-data-table__cell--non-numeric">No.</th>
+                      <th class="mdl-data-table__cell--non-numeric">Job ID</th>
+                      <th class="mdl-data-table__cell--non-numeric">Local</th>
+                      <th class="mdl-data-table__cell--non-numeric">Cache</th>
+                      <th class="mdl-data-table__cell--non-numeric">Cross</th>
+                      <th class="mdl-data-table__cell--non-numeric">Daemon</th>
+                      <th class="mdl-data-table__cell--non-numeric">archive</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mdl-data-table__cell--non-numeric">1</td>
+                      <td class="mdl-data-table__cell--non-numeric">4qamwuejtdR0PG80AAAk</td>
+                      <td class="mdl-data-table__cell--non-numeric">local..</td>
+                      <td class="mdl-data-table__cell--non-numeric">dsffere</td>
+                      <td class="mdl-data-table__cell--non-numeric">cross</td>
+                      <td class="mdl-data-table__cell--non-numeric">daemon</td>
+                      <td class="mdl-data-table__cell--non-numeric">archive</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="mdl-card__actions mdl-card--border">
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="refresh-job-lists">
+                    REFRESH
+                  </a>
+                </div>
+              </div>
+              <!-- End of Job Lists -->
+
             </div>
           </div>
         </section>
