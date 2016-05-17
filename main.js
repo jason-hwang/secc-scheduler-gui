@@ -38,7 +38,7 @@ var ipcMain = electron.ipcMain;
 let mainWindow;
 
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 1000, height: 600});
+  mainWindow = new BrowserWindow({width: 1000, height: 600, minWidth:1000, minHeight:600});
   mainWindow.loadURL('file://' + path.join(__dirname, 'app', 'index.html'));
 
   // Open the DevTools.
