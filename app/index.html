@@ -5,70 +5,10 @@
     <title>secc-scheduler</title>
     <link href="css/material.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
+    <link href="css/main.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="js/material.min.js"></script>
-    <script>window.$ = window.jQuery = require('./js/jquery-1.12.3.min');</script>
   </head>
-  <style>
-    * {
-      margin:0px;
-      padding:0px;
-      box-sizing: border-box;
-    }
-    .main-container {
-      margin:20px;
-    }
-    
-    .demo-layout-transparent .mdl-layout__header,
-    .demo-layout-transparent .mdl-layout__drawer-button {
-      color: white;
-    }
-
-    .mdl-button-full-width {
-      width:100%;
-    }
-
-    .mdl-navigation__link img{
-      width:36px;
-      padding-right:10px;
-    }
-
-    .common-card-wide {
-      width:100%;
-    }
-
-    .common-textfield-wide {
-      width:70%;
-    }
-
-    .mdl-card {
-      margin-bottom:20px;
-    }
-
-    .mdl-card__supporting-text {
-      width:100%;
-    }
-
-    .mdl-layout-title, .mdl-navigation, .mdl-layout__content {
-      font-family: 'Source Sans Pro', sans-serif;
-      font-weight: 800; 
-    }
-
-    .mdl-card .mdl-data-table {
-      border:none;
-      border-top:1px solid rgba(0,0,0,.12);
-    }
-
-    .mdl-card .mdl-data-table td {
-      border-bottom:0px;
-    }
-
-    .mdl-layout__tab-panel {
-      display: none;
-    }
-
-  </style>
   <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="mdl-layout__header">
@@ -111,6 +51,9 @@
           <a class="mdl-navigation__link mdl-custom-tab" href="#tab-scheduler" title="Scheduler">
             <img src="images/scheduler.svg" alt="Scheduler image">Scheduler
           </a>
+          <a class="mdl-navigation__link mdl-custom-tab" href="#tab-settings" title="Settings">
+            <img src="images/settings.svg" alt="Scheduler image">Settings
+          </a>
         </nav>
 
         <!-- Divider -->
@@ -131,6 +74,8 @@
       
       <!-- Main content area -->
       <main class="mdl-layout__content">
+        
+        <!-- Dashboard tab -->
         <section class="mdl-layout__tab-panel is-active" id="tab-dashboard">
           <div class="page-content">
             <div class="main-container">
@@ -140,63 +85,10 @@
           </div>
         </section>
 
+        <!-- Scheduler tab -->
         <section class="mdl-layout__tab-panel" id="tab-scheduler">
           <div class="page-content">
             <div class="main-container">
-              <!-- Environment Path -->
-              <div class="common-card-wide mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                  <h2 class="mdl-card__title-text">Environment Path</h2>
-                </div>
-                <div class="mdl-card__supporting-text">
-                  <div>
-                    Upload Path : 
-                    <div class="common-textfield-wide mdl-textfield mdl-js-textfield">
-                      <input class="mdl-textfield__input" type="text" id="upload-path-field">
-                      <label class="mdl-textfield__label" for="upload-path"></label>
-                    </div>
-                    <button class="mdl-button mdl-js-button mdl-button--raised 
-                    mdl-js-ripple-effect" id="upload-path-btn">
-                      ...
-                    </button>
-                    &nbsp;
-                    <button class="mdl-button mdl-js-button mdl-button--raised 
-                    mdl-js-ripple-effect" id="open-upload-path">
-                      Open
-                    </button>
-                    <input type="file" id="hidden-upload-path" 
-                    webkitdirectory directory multiple hidden/>
-                  </div>
-                  <div>
-                    Archive Path : 
-                    <div class="common-textfield-wide mdl-textfield mdl-js-textfield">
-                      <input class="mdl-textfield__input" type="text" id="archive-path-field">
-                      <label class="mdl-textfield__label" for="archive-path"></label>
-                    </div>
-                    <button class="mdl-button mdl-js-button mdl-button--raised 
-                    mdl-js-ripple-effect" id="archive-path-btn">
-                      ...
-                    </button>
-                    &nbsp;
-                    <button class="mdl-button mdl-js-button mdl-button--raised 
-                    mdl-js-ripple-effect" id="open-archive-path">
-                      Open
-                    </button>
-                    <input type="file" id="hidden-archive-path" 
-                    webkitdirectory directory multiple hidden/>
-                  </div>
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="env-path-save">
-                    SAVE
-                  </a>
-                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="env-path-reset">
-                    RESET
-                  </a>
-                </div>
-              </div>
-              <!-- End of Enviorment Path -->
-
               <!-- Archive Lists -->
               <div class="common-card-wide mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title">
@@ -323,6 +215,105 @@
             </div>
           </div>
         </section>
+
+        <!-- Settings tab -->
+        <section class="mdl-layout__tab-panel" id="tab-settings">
+          <div class="page-content">
+            <div class="main-container">
+              <!-- Environment Path -->
+              <div class="common-card-wide mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">Environment Path</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                  <div>
+                    Upload Path : 
+                    <div class="common-textfield-wide mdl-textfield mdl-js-textfield">
+                      <input class="mdl-textfield__input" type="text" id="upload-path-field">
+                      <label class="mdl-textfield__label" for="upload-path"></label>
+                    </div>
+                    <button class="mdl-button mdl-js-button mdl-button--raised 
+                    mdl-js-ripple-effect" id="upload-path-btn">
+                      ...
+                    </button>
+                    &nbsp;
+                    <button class="mdl-button mdl-js-button mdl-button--raised 
+                    mdl-js-ripple-effect" id="open-upload-path">
+                      Open
+                    </button>
+                    <input type="file" id="hidden-upload-path" 
+                    webkitdirectory directory multiple hidden/>
+                  </div>
+                  <div>
+                    Archive Path : 
+                    <div class="common-textfield-wide mdl-textfield mdl-js-textfield">
+                      <input class="mdl-textfield__input" type="text" id="archive-path-field">
+                      <label class="mdl-textfield__label" for="archive-path"></label>
+                    </div>
+                    <button class="mdl-button mdl-js-button mdl-button--raised 
+                    mdl-js-ripple-effect" id="archive-path-btn">
+                      ...
+                    </button>
+                    &nbsp;
+                    <button class="mdl-button mdl-js-button mdl-button--raised 
+                    mdl-js-ripple-effect" id="open-archive-path">
+                      Open
+                    </button>
+                    <input type="file" id="hidden-archive-path" 
+                    webkitdirectory directory multiple hidden/>
+                  </div>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="env-path-save">
+                    SAVE
+                  </a>
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="env-path-reset">
+                    RESET
+                  </a>
+                </div>
+              </div>
+              <!-- End of Enviorment Path -->
+              <!-- Environment Variable Lists -->
+              <div class="common-card-wide mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">Environment Variables</h2>
+                </div>
+                <table class="common-card-wide mdl-data-table mdl-js-data-table mdl-data-table--selectable" id="env-variables">
+                  <thead>
+                    <tr>
+                      <th class="mdl-data-table__cell--non-numeric">No.</th>
+                      <th class="mdl-data-table__cell--non-numeric">Variable Name</th>
+                      <th class="mdl-data-table__cell--non-numeric">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mdl-data-table__cell--non-numeric">1</td>
+                      <td class="mdl-data-table__cell--non-numeric">SECC_PORT</td>
+                      <td class="mdl-data-table__cell--non-numeric">10509</td>
+                    </tr>
+                    <tr>
+                      <td class="mdl-data-table__cell--non-numeric">2</td>
+                      <td class="mdl-data-table__cell--non-numeric">SECC_LOG</td>
+                      <td class="mdl-data-table__cell--non-numeric"></td>
+                    </tr>
+                    <tr>
+                      <td class="mdl-data-table__cell--non-numeric">3</td>
+                      <td class="mdl-data-table__cell--non-numeric">DEBUG</td>
+                      <td class="mdl-data-table__cell--non-numeric"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="mdl-card__actions mdl-card--border">
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="refresh-env-variables">
+                    REFRESH
+                  </a>
+                </div>
+              </div>
+              <!-- End of Daemon Lists -->
+            </div>
+          </div>
+        </section>
       </main>
     </div> <!-- End of mdl-layout__drawer -->
 
@@ -331,191 +322,6 @@
       <button class="mdl-snackbar__action" type="button"></button>
     </div>
     
-    <script>
-      var ipcRenderer = require('electron').ipcRenderer;
-
-      var webview = document.querySelector("#scheduler-view");
-      var start = document.querySelector('#scheduler-start');
-      var stop = document.querySelector('#scheduler-stop');
-      var serverPort = document.querySelector('#scheduler-port');
-      var snackbarContainer = document.querySelector('#toast-msg');
-
-      var emptyPageAddress = "about:blank;"
-      var schedulerAddress = "http://localhost"
-      
-      var startMessage = "Server is running : )";
-      var stopMessage = "Server is stopping : (";
-
-      var uploadPathField = document.querySelector('#upload-path-field');
-      var uploadPathBtn = document.querySelector('#upload-path-btn');
-      var uploadPathOpen = document.querySelector('#open-upload-path');
-      var archivePathField = document.querySelector('#archive-path-field');
-      var archivePathBtn = document.querySelector('#archive-path-btn');
-      var archivePathOpen = document.querySelector('#open-archive-path');
-
-      var envPathSave = document.querySelector('#env-path-save');
-      var envPathReset = document.querySelector('#env-path-reset');
-
-      start.onclick = function() {
-        ipcRenderer.send('start-scheduler', serverPort.value);
-      }
-
-      stop.onclick = function() {
-        ipcRenderer.send('stop-scheduler');
-      }
-
-      uploadPathBtn.onclick = function() {
-        ipcRenderer.send('open-file-explorer', 'upload');
-      }
-
-      archivePathBtn.onclick = function() {
-        ipcRenderer.send('open-file-explorer', 'archive'); 
-      }
-
-      envPathSave.onclick = function() {
-        ipcRenderer.send('save-env-path', { 
-          uploadPath: uploadPathField.value,
-          archivePath: archivePathField.value
-        });
-        showMessage("save env paths.")
-      }
-
-      envPathReset.onclick = function() {
-        ipcRenderer.send('reset-env-path');
-        console.log("reset env paths.");
-      }
-
-      uploadPathOpen.onclick = function() {
-        ipcRenderer.send('open-env-path', 'upload');
-      }
-
-      archivePathOpen.onclick = function() {
-        ipcRenderer.send('open-env-path', 'archive');
-      }
-
-      function changeWebViewURL(address) {
-        webview.setAttribute('src', address);
-        console.log("Change Address : " + address);
-      }
-
-      function closeDrawerMenu() {
-        var drawerMenu = document.querySelector(".mdl-layout__drawer");
-        var obfuscator = document.querySelector(".mdl-layout__obfuscator");
-        drawerMenu.classList.remove("is-visible");
-        obfuscator.classList.remove("is-visible");
-      }
-
-      function changeSchedulerStatus(flag) {
-        var changedURL = '';
-        var msg = null;
-        var startBtnVisible = '';
-        var stopBtnVisible = '';
-
-        if (flag === 'start') {
-          changedURL = schedulerAddress+":"+serverPort.value;
-          msg = startMessage;
-          startBtnVisible = 'display:none;';
-          stopBtnVisible = 'display:block;';
-        } else {
-          changedURL = emptyPageAddress;
-          msg = stopMessage;
-          startBtnVisible = 'display:block';
-          stopBtnVisible = 'display:none';
-        }
-
-        changeWebViewURL(changedURL);
-        start.setAttribute('style', startBtnVisible);
-        stop.setAttribute('style', stopBtnVisible);
-        showMessage(msg);
-      }
-
-      function showMessage(msg) {
-        snackbarContainer.MaterialSnackbar.showSnackbar({message:msg});
-      }
-
-      // This function called by menubar start event on Main Process
-      ipcRenderer.on('call-start-scheduler', function(evnet, arg) {
-        ipcRenderer.send('start-scheduler', serverPort.value);
-      });
-
-      // This function called by menubar stop event on Main Process
-      ipcRenderer.on('call-stop-scheduler', function(event, arg) {
-        ipcRenderer.send('stop-scheduler');
-      });
-
-      // This function called by 'start-scheduler' ipc event on Main Process
-      ipcRenderer.on('start-scheduler-callback', function(event, arg) {
-        changeSchedulerStatus('start');
-        closeDrawerMenu();
-      });
-
-      // This function called by 'stop-scheduler' ipc event on Main Process
-      ipcRenderer.on('stop-scheduler-callback', function(event, arg) {
-        changeSchedulerStatus('stop');
-        closeDrawerMenu();
-      });
-
-      // This function called by 'check-scheduler-running' ipc event on Main Process
-      ipcRenderer.on('check-scheduler-running-callback', function(event, server) {
-        if (server) {
-          changeSchedulerStatus('start');
-        }
-      });
-
-      // This function called by 'check-scheduler-running' ipc event on Main Process
-      ipcRenderer.on('get-scheduler-settings-callback', function(event, settings) {
-        uploadPathField.value = settings.uploadPath;
-        archivePathField.value = settings.archivePath;
-
-        console.log('uploadPath:', settings.uploadPath);
-        console.log('archivePath:', settings.archivePath);
-      });
-
-      // This function called by 'check-scheduler-running' ipc event on Main Process
-      ipcRenderer.on('open-file-explorer-callback', function(event, obj) {
-        if (typeof obj.path === 'undefined') {
-          console.log("Not selected..");
-          return;
-        }
-
-        if (obj.type === 'upload') {
-          uploadPathField.value = obj.path;
-        } else if (obj.type === 'archive') {
-          archivePathField.value = obj.path;
-        }
-      });
-
-      // for gui
-      function clearIsActive(customTabs) {
-        for (var i=0; i<customTabs.length; i++) {
-          customTabs[i].classList.remove("is-active");
-        }
-      }
-
-      function changeMainTitle(title) {
-        document.querySelector("#main-header-title").innerHTML = title;
-      }
-
-      var customTabs = document.querySelectorAll(".mdl-custom-tab");
-      var customTabPanels = document.querySelectorAll(".mdl-layout__tab-panel");
-
-      // register event
-      for(var i=0; i<customTabs.length; i++) {
-        (function(idx) {
-            customTabs[idx].onclick = function() {
-              clearIsActive(customTabPanels);
-              customTabPanels[idx].classList.add("is-active");
-              changeMainTitle(customTabs[idx].getAttribute("title"));
-              closeDrawerMenu();
-            }
-        })(i);
-      }
-
-      (function(){
-        ipcRenderer.send('check-scheduler-running');
-        ipcRenderer.send('get-scheduler-settings');
-      })();
-
-    </script>
+    <script data-main="js/main.js" src="js/require-2.2.0.min.js"></script>
   </body>
 </html>

@@ -1,0 +1,56 @@
+* {
+  margin:0px;
+  padding:0px;
+  box-sizing: border-box;
+}
+.main-container {
+  margin:20px;
+}
+
+.demo-layout-transparent .mdl-layout__header,
+.demo-layout-transparent .mdl-layout__drawer-button {
+  color: white;
+}
+
+.mdl-button-full-width {
+  width:100%;
+}
+
+.mdl-navigation__link img{
+  width:36px;
+  padding-right:10px;
+}
+
+.common-card-wide {
+  width:100%;
+}
+
+.common-textfield-wide {
+  width:70%;
+}
+
+.mdl-card {
+  margin-bottom:20px;
+}
+
+.mdl-card__supporting-text {
+  width:100%;
+}
+
+.mdl-layout-title, .mdl-navigation, .mdl-layout__content {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 800; 
+}
+
+.mdl-card .mdl-data-table {
+  border:none;
+  border-top:1px solid rgba(0,0,0,.12);
+}
+
+.mdl-card .mdl-data-table td {
+  border-bottom:0px;
+}
+
+.mdl-layout__tab-panel {
+  display: none;
+}
